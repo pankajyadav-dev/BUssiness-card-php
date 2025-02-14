@@ -8,8 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     try {
-        $stmt = $pdo->prepare("INSERT INTO users (username,Organisation_name, email, password) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$username, $Organisationname, $email, $password]);
+        $stmt = $pdo->prepare("INSERT INTO users (username, organisation_name, email, password) SELECT ?, ?, ev.email, ? FROM email_verification ev WHERE ev.verified = 1 AND ev.email = ?;");
+        $stmt->execute([$username, $Organisationname, $password,$email]);
         header("Location: ../login.html");
         exit();
     } catch (PDOException $e) {

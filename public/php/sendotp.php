@@ -31,7 +31,7 @@ $otp = rand(100000, 999999);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "email_verification";
+$dbname = "business_card_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -40,7 +40,7 @@ if ($conn->connect_error) {
 }
 
 // Insert user data into the database
-$stmt = $conn->prepare("INSERT INTO users (email, otp, verified) VALUES (?, ?, 0)");
+$stmt = $conn->prepare("INSERT INTO email_verification (email, otp, verified) VALUES (?, ?, 0)");
 $stmt->bind_param("ss", $email, $otp);
 
 if ($stmt->execute()) {
@@ -64,7 +64,7 @@ if ($stmt->execute()) {
         // Content
         $mail->isHTML(true); // Set email format to HTML
         $mail->Subject = 'Your OTP for Verification';
-        $mail->Body = "Your OTP for verification is: <b>$otp</b>";
+        $mail->Body = "Your OTP for verification is: <b>$otp</b> don't share with anyone";
 
         $mail->send();
         echo json_encode([
