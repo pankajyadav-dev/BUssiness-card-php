@@ -20,7 +20,14 @@
             </div>
         </div>
     </nav>
-
+    <div>
+        <h2>User Profile</h2>
+        <div id="user-info">
+            <p><strong>Username:</strong> <span id="username"></span></p>
+            <p><strong>Organisation:</strong> <span id="organisation"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+        </div>
+    </div>
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Card Form -->
@@ -66,7 +73,36 @@
             </div>
         </div>
     </div>
+    <!-- //fetch user setails -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    // Assuming the email is stored in localStorage after login
+    const username = localStorage.getItem("username");
 
+    if (!username) {
+        alert("No user logged in.");
+        return;
+    }
+
+    fetch('php/get_user.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("username").textContent = data.user.username;
+            document.getElementById("organisation").textContent = data.user.organisation_name;
+            document.getElementById("email").textContent = data.user.email;
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+
+    </script>
     <script>
         // JavaScript for real-time preview updates
         const form = document.getElementById('cardForm');
